@@ -36,7 +36,10 @@
 }
 
 - (IBAction)reDeal:(id)sender {
-    NSLog(@"Redealing...");
+    _game = [[CardMatchingGame alloc] initWithCardCount:self.cardButtons.count usingDeck:[[PlayingCardDeck alloc] init]];
+    [self updateUI];
+    [self setFlipCount:0];
+    self.actionLabel.text = @"New Game Dealt";
 }
 
 - (void)updateUI
@@ -58,7 +61,6 @@
 {
     _flipCount = flipCount;
     self.flipsLabel.text = [NSString stringWithFormat:@"Flips: %d", self.flipCount];
-    NSLog(@"flips label updated to %d", self.flipCount);
 }
 
 - (IBAction)flipCard:(UIButton *)sender {
