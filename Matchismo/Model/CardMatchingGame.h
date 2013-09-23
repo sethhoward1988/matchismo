@@ -18,6 +18,7 @@
 - (Card *)cardAtIndex:(NSUInteger)index;
 
 @property (nonatomic, readonly) int score;
+@property (nonatomic, readwrite) int matchCount;
 @property (nonatomic, readonly) NSString *action;
 
 @end

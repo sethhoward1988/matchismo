@@ -19,13 +19,17 @@
 @property (weak, nonatomic) IBOutlet UILabel *actionLabel;
 @property (strong, nonatomic) NSMutableArray *cards;
 @property (weak, nonatomic) IBOutlet UIButton *dealButton;
+@property (weak, nonatomic) IBOutlet UISegmentedControl *segmentedControl;
 @end
 
 @implementation CardGameViewController
 
 - (CardMatchingGame *)game
 {
-    if (!_game) _game = [[CardMatchingGame alloc] initWithCardCount:self.cardButtons.count usingDeck:[[PlayingCardDeck alloc] init]];
+    if (!_game) {
+        _game = [[CardMatchingGame alloc] initWithCardCount:self.cardButtons.count usingDeck:[[PlayingCardDeck alloc] init]];
+        _game.matchCount = 2;
+    }
     return _game;
 }
 
@@ -34,11 +38,21 @@
     _cardButtons = cardButtons;
     [self updateUI];
 }
+- (IBAction)onSegmentedValueChange:(id)sender {
+    UISegmentedControl *segmentedControl = (UISegmentedControl *)sender;
+    NSString *value = [segmentedControl titleForSegmentAtIndex: [segmentedControl selectedSegmentIndex]];
+    int newMatchCount = [value intValue];
+    self.game.matchCount = newMatchCount;
+//    [self.game setMatchCount:newMatchCount];
+}
 
 - (IBAction)reDeal:(id)sender {
-    _game = [[CardMatchingGame alloc] initWithCardCount:self.cardButtons.count usingDeck:[[PlayingCardDeck alloc] init]];
+    int existingMatchCount = self.game.matchCount;
+    self.game = [[CardMatchingGame alloc] initWithCardCount:self.cardButtons.count usingDeck:[[PlayingCardDeck alloc] init]];
+    self.game.matchCount = existingMatchCount;
     [self updateUI];
     [self setFlipCount:0];
+    [self.segmentedControl setEnabled:YES];
     self.actionLabel.text = @"New Game Dealt";
 }
 
@@ -65,10 +79,9 @@
 
 - (IBAction)flipCard:(UIButton *)sender {
     [self.game flipCardAtIndex:[self.cardButtons indexOfObject:sender]];
+    [self.segmentedControl setEnabled:NO];
     self.flipCount++;
     [self updateUI];
 }
-
-
 
 @end
