@@ -16,6 +16,9 @@
 @property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *cardButtons;
 @property (strong, nonatomic) CardMatchingGame *game;
 @property (weak, nonatomic) IBOutlet UILabel *scoreLabel;
+@property (weak, nonatomic) IBOutlet UILabel *actionLabel;
+@property (strong, nonatomic) NSMutableArray *cards;
+@property (weak, nonatomic) IBOutlet UIButton *dealButton;
 @end
 
 @implementation CardGameViewController
@@ -32,8 +35,13 @@
     [self updateUI];
 }
 
+- (IBAction)reDeal:(id)sender {
+    NSLog(@"Redealing...");
+}
+
 - (void)updateUI
 {
+    _cards = [[NSMutableArray alloc] init];
     for (UIButton *cardButton in self.cardButtons) {
         Card *card = [self.game cardAtIndex:[self.cardButtons indexOfObject:cardButton]];
         [cardButton setTitle:card.contents forState:UIControlStateSelected];
@@ -43,6 +51,7 @@
         cardButton.alpha = card.isUnplayable ? 0.3 : 1.0;
     }
     self.scoreLabel.text = [NSString stringWithFormat:@"Score: %d", self.game.score];
+    self.actionLabel.text = self.game.action;
 }
 
 - (void)setFlipCount:(int)flipCount
