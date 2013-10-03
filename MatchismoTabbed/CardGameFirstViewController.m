@@ -6,11 +6,11 @@
 //  Copyright (c) 2013 Seth Howard. All rights reserved.
 //
 
-#import "CardGameViewController.h"
+#import "CardGameFirstViewController.h"
 #import "PlayingCardDeck.h"
 #import "CardMatchingGame.h"
 
-@interface CardGameViewController ()
+@interface CardGameFirstViewController ()
 @property (weak, nonatomic) IBOutlet UILabel *flipsLabel;
 @property (nonatomic) int flipCount;
 @property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *cardButtons;
@@ -19,10 +19,9 @@
 @property (weak, nonatomic) IBOutlet UILabel *actionLabel;
 @property (strong, nonatomic) NSMutableArray *cards;
 @property (weak, nonatomic) IBOutlet UIButton *dealButton;
-@property (weak, nonatomic) IBOutlet UISegmentedControl *segmentedControl;
 @end
 
-@implementation CardGameViewController
+@implementation CardGameFirstViewController
 
 - (CardMatchingGame *)game
 {
@@ -38,13 +37,6 @@
     _cardButtons = cardButtons;
     [self updateUI];
 }
-- (IBAction)onSegmentedValueChange:(id)sender {
-    UISegmentedControl *segmentedControl = (UISegmentedControl *)sender;
-    NSString *value = [segmentedControl titleForSegmentAtIndex: [segmentedControl selectedSegmentIndex]];
-    int newMatchCount = [value intValue];
-    self.game.matchCount = newMatchCount;
-//    [self.game setMatchCount:newMatchCount];
-}
 
 - (IBAction)reDeal:(id)sender {
     int existingMatchCount = self.game.matchCount;
@@ -52,7 +44,6 @@
     self.game.matchCount = existingMatchCount;
     [self updateUI];
     [self setFlipCount:0];
-    [self.segmentedControl setEnabled:YES];
     self.actionLabel.text = @"New Game Dealt";
 }
 
@@ -79,7 +70,6 @@
 
 - (IBAction)flipCard:(UIButton *)sender {
     [self.game flipCardAtIndex:[self.cardButtons indexOfObject:sender]];
-    [self.segmentedControl setEnabled:NO];
     self.flipCount++;
     [self updateUI];
 }
